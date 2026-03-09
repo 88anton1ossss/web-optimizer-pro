@@ -391,31 +391,33 @@ function App() {
             </div>
           )}
           <aside className="w-64 border-r border-brand-text/10 p-5 flex-shrink-0 bg-brand-bg flex flex-col gap-6 sticky top-[73px] h-[calc(100vh-73px)] overflow-y-auto hidden md:flex">
-            <div className={`w-full rounded-3xl p-6 flex flex-col items-center justify-center shadow-lg relative overflow-hidden bg-brand-bg border transition-all ${audit.score >= 80 ? 'border-brand-accent/30 shadow-brand-accent/10' : audit.score >= 50 ? 'border-brand-secondary/30 shadow-brand-secondary/10' : 'border-brand-primary/30 shadow-brand-primary/10'}`}>
+            <div className={`w-full aspect-square rounded-3xl p-5 flex flex-col items-center justify-center shadow-lg relative overflow-hidden bg-brand-bg border transition-all ${audit.score >= 80 ? 'border-brand-accent/30 shadow-brand-accent/10' : audit.score >= 50 ? 'border-brand-secondary/30 shadow-brand-secondary/10' : 'border-brand-primary/30 shadow-brand-primary/10'}`}>
               <div className={`absolute inset-0 opacity-[0.03] pointer-events-none ${scoreColorBg}`}></div>
 
-              <p className="text-[10px] font-black text-brand-text/60 uppercase tracking-widest mb-4 z-10 text-center">Health Score</p>
+              <p className="text-[10px] font-black text-brand-text/60 uppercase tracking-widest mb-2 z-10 text-center">Health Score</p>
 
-              <div className="relative w-28 h-28 z-10 flex items-center justify-center mb-6">
-                <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full -rotate-90 origin-center filter drop-shadow-md">
-                  <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" className="text-brand-text/5" strokeWidth="8" />
+              <div className="relative w-[6.5rem] h-[6.5rem] z-10 mb-4 flex-shrink-0">
+                <svg className="absolute inset-0 w-full h-full -rotate-90 origin-center filter drop-shadow-md">
+                  <circle cx="50%" cy="50%" r="42%" fill="none" stroke="currentColor" className="text-brand-text/10" strokeWidth="8%" />
                   <circle
-                    cx="50" cy="50" r="42"
+                    cx="50%" cy="50%" r="42%"
                     fill="none"
                     stroke={scoreColor}
-                    strokeWidth="8"
-                    strokeDasharray={2 * Math.PI * 42}
-                    strokeDashoffset={2 * Math.PI * 42 - (audit.score / 100) * 2 * Math.PI * 42}
+                    strokeWidth="8%"
+                    strokeDasharray={`${2 * Math.PI * 42}%`}
+                    strokeDashoffset={`${2 * Math.PI * 42 - (audit.score / 100) * 2 * Math.PI * 42}%`}
                     strokeLinecap="round"
                     className="transition-all duration-1000 ease-out"
                   />
                 </svg>
-                <span className="text-4xl font-black text-brand-text tracking-tighter">{audit.score}</span>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-4xl font-black text-brand-text tracking-tighter">{audit.score}</span>
+                </div>
               </div>
 
-              <div className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-brand-text/[0.03] border border-brand-text/10 rounded-xl z-10 w-full">
-                <Globe size={12} className="text-brand-primary flex-shrink-0" />
-                <span className="text-xs font-bold font-mono text-brand-text truncate" title={hostname}>{hostname}</span>
+              <div className="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 bg-brand-text/[0.03] border border-brand-text/10 rounded-lg z-10">
+                <Globe size={10} className="text-brand-primary flex-shrink-0" />
+                <span className="text-[10px] font-bold font-mono text-brand-text truncate" title={hostname}>{hostname}</span>
               </div>
             </div>
 
