@@ -185,8 +185,8 @@ RULES:
      * Chat with the AI about the audit data.
      */
     static async chatWithAudit(message: string, auditContext: string): Promise<string> {
-        const fallbackModels = ["gemini-2.0-flash-lite", "gemini-2.0-flash", "gemini-2.5-flash"];
-        let lastError = null;
+        const fallbackModels = ["gemini-2.0-flash-lite", "gemini-1.5-flash", "gemini-2.0-flash", "gemini-2.5-flash"];
+        let lastError: any = null;
 
         for (const modelName of fallbackModels) {
             try {
@@ -198,8 +198,14 @@ RULES:
             } catch (error: any) {
                 console.warn(`Chat model ${modelName} failed`, error.message);
                 lastError = error;
+                // If it's a 429 quota error, we should tell the user immediately or try the next model. Next model might share quota, but it's worth trying.
             }
         }
+
+        if (lastError?.status === 429 || lastError?.message?.includes('429') || lastError?.message?.includes('quota')) {
+            return `Protocol Error (429): Google Gemini API quota exceeded for the free tier. Please wait about 60 seconds before sending another request, or check your API billing plan.`;
+        }
+
         return `Protocol error: ${lastError?.message || "All models failed. Free tier quota may be exhausted."}`;
     }
 }

@@ -4,19 +4,19 @@
 
 @layer base {
   :root {
-    --brand-bg: 255 238 235;
-    --brand-text: 31 5 0;
-    --brand-primary: 254 61 27;
-    --brand-secondary: 255 231 112;
-    --brand-accent: 188 198 1;
+    --brand-bg: 252 254 246;
+    --brand-text: 28 39 2;
+    --brand-primary: 91 129 8;
+    --brand-secondary: 90 231 246;
+    --brand-accent: 13 86 222;
   }
 
   .dark {
-    --brand-bg: 20 3 0;
-    --brand-text: 255 229 224;
-    --brand-primary: 228 35 1;
-    --brand-secondary: 143 119 0;
-    --brand-accent: 188 198 1;
+    --brand-bg: 7 9 1;
+    --brand-text: 242 253 216;
+    --brand-primary: 208 247 126;
+    --brand-secondary: 9 149 165;
+    --brand-accent: 33 106 242;
   }
 
   body {
@@ -29,6 +29,7 @@
   .glass-morphism {
     @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] shadow-glass;
   }
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
