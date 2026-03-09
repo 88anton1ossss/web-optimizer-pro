@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --brand-bg: 255 238 235;
+    --brand-text: 31 5 0;
+    --brand-primary: 254 61 27;
+    --brand-secondary: 255 231 112;
+    --brand-accent: 188 198 1;
+  }
+
+  .dark {
+    --brand-bg: 20 3 0;
+    --brand-text: 255 229 224;
+    --brand-primary: 228 35 1;
+    --brand-secondary: 143 119 0;
+    --brand-accent: 188 198 1;
+  }
+
+  body {
+    @apply bg-brand-bg text-brand-text antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .glass-morphism {
+    @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] shadow-glass;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
