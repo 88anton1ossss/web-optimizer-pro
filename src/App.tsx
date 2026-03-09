@@ -337,52 +337,54 @@ function App() {
 
     return (
       <div className="flex-1 flex flex-col bg-brand-bg text-brand-text transition-colors duration-500">
-        <header className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 border-b border-brand-text/10 bg-brand-bg/80 backdrop-blur-xl">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-brand-primary/20 border border-brand-primary/30 flex items-center justify-center">
-              <Zap size={20} className="text-brand-primary" />
+        <header className="sticky top-0 z-50 flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-brand-text/10 bg-brand-bg/90 backdrop-blur-xl">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 rounded-xl bg-brand-primary/20 border border-brand-primary/30 flex items-center justify-center">
+              <Zap size={18} className="text-brand-primary" />
             </div>
             <div>
-              <h1 className="text-sm font-black text-brand-text uppercase tracking-widest flex items-center gap-2">
-                Web Optimizer <span className="text-brand-primary text-[10px]">PRO</span>
+              <h1 className="text-[10px] sm:text-sm font-black text-brand-text uppercase tracking-widest flex items-center gap-1 sm:gap-2">
+                Web Optimizer <span className="text-brand-primary text-[8px] sm:text-[10px] hidden sm:inline">PRO</span>
               </h1>
-              <span className="text-[9px] font-black text-brand-accent uppercase tracking-[0.3em]">Deep Audit Protocol V2.0</span>
+              <span className="text-[7px] sm:text-[9px] font-black text-brand-accent uppercase tracking-[0.3em] hidden sm:block">Deep Audit Protocol V2.0</span>
             </div>
           </div>
-          <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
-            <button onClick={() => setAppState('IDLE')} className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-brand-text/10 hover:bg-brand-text/5 transition-all text-[10px] font-black uppercase tracking-widest text-brand-text">
-              New Scan
+          <div className="flex flex-wrap items-center gap-1 sm:gap-2 ml-auto justify-end">
+            <button onClick={() => setAppState('IDLE')} className="flex flex-shrink-0 items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl border border-brand-text/10 hover:bg-brand-text/5 transition-all text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-brand-text">
+              <span className="hidden sm:inline">New Scan</span>
+              <span className="sm:hidden">New</span>
             </button>
             <button
               onClick={handleExportPDF}
               disabled={isExporting}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-brand-secondary/30 bg-brand-secondary/10 text-brand-secondary hover:bg-brand-secondary/20 transition-all font-black text-[10px] uppercase tracking-widest shadow-glass disabled:opacity-50"
+              className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl border border-brand-secondary/30 bg-brand-secondary/10 text-brand-secondary hover:bg-brand-secondary/20 transition-all font-black text-[8px] sm:text-[10px] uppercase tracking-widest shadow-glass disabled:opacity-50 flex-shrink-0"
             >
-              {isExporting ? <AlertCircle size={14} className="animate-spin" /> : <Download size={14} />} PDF
+              {isExporting ? <AlertCircle size={12} className="animate-spin" /> : <Download size={12} />}
+              <span className="hidden sm:inline">PDF</span>
             </button>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-shrink-0">
               <select
                 value={language}
                 onChange={(e) => handleLanguageChange(e.target.value)}
-                className="appearance-none bg-brand-primary/10 border border-brand-primary/30 text-brand-primary hover:bg-brand-primary/20 transition-all font-black text-[10px] uppercase tracking-widest pl-3 pr-6 py-2 rounded-xl focus:outline-none cursor-pointer"
+                className="appearance-none bg-brand-primary/10 border border-brand-primary/30 text-brand-primary hover:bg-brand-primary/20 transition-all font-black text-[8px] sm:text-[10px] uppercase tracking-widest pl-2 pr-4 sm:pl-3 sm:pr-6 py-1.5 sm:py-2 rounded-xl focus:outline-none cursor-pointer"
               >
                 {SUPPORTED_LANGUAGES.map(lang => (
                   <option key={lang} value={lang} className="bg-brand-bg text-brand-text">
-                    {lang}
+                    {lang.substring(0, 3).toUpperCase()} <span className="hidden sm:inline">{lang}</span>
                   </option>
                 ))}
               </select>
             </div>
-            <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="flex items-center justify-center w-9 h-9 rounded-xl border border-brand-primary/30 text-brand-text transition-all hover:bg-brand-primary/10 hover:scale-105 shadow-glass">
-              {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+            <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="flex items-center justify-center w-7 h-7 sm:w-9 sm:h-9 rounded-xl border border-brand-primary/30 text-brand-text transition-all hover:bg-brand-primary/10 flex-shrink-0">
+              {theme === 'dark' ? <Sun size={12} /> : <Moon size={12} />}
             </button>
-            <button onClick={() => setShowAssistant(!showAssistant)} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-primary/10 border border-brand-primary/30 text-brand-primary hover:bg-brand-primary/20 transition-all font-black text-[10px] uppercase tracking-widest shadow-glass">
-              <MessageSquare size={14} /> Assistant
+            <button onClick={() => setShowAssistant(!showAssistant)} className="flex items-center gap-1.5 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-brand-primary/10 border border-brand-primary/30 text-brand-primary hover:bg-brand-primary/20 transition-all font-black text-[8px] sm:text-[10px] uppercase tracking-widest flex-shrink-0 shadow-glass">
+              <MessageSquare size={12} /> <span className="hidden sm:inline">Assistant</span>
             </button>
           </div>
         </header>
 
-        <div className="flex flex-1 relative items-start">
+        <div className="flex flex-1 relative items-start flex-col md:flex-row">
           {isTranslating && (
             <div className="absolute inset-0 z-40 bg-brand-bg/80 backdrop-blur-sm flex flex-col items-center justify-center">
               <Loader2 size={48} className="animate-spin text-brand-primary mb-4" />
@@ -390,50 +392,57 @@ function App() {
               <p className="text-sm text-brand-text/60 font-medium">Re-calculating data logic for {language}...</p>
             </div>
           )}
-          <aside className="w-64 border-r border-brand-text/10 p-5 flex-shrink-0 bg-brand-bg flex flex-col gap-6 sticky top-[73px] h-[calc(100vh-73px)] overflow-y-auto hidden md:flex">
-            <div className={`w-full aspect-square rounded-3xl p-5 flex flex-col items-center justify-center shadow-lg relative overflow-hidden bg-brand-bg border transition-all ${audit.score >= 80 ? 'border-brand-accent/30 shadow-brand-accent/10' : audit.score >= 50 ? 'border-brand-secondary/30 shadow-brand-secondary/10' : 'border-brand-primary/30 shadow-brand-primary/10'}`}>
-              <div className={`absolute inset-0 opacity-[0.03] pointer-events-none ${scoreColorBg}`}></div>
 
-              <p className="text-[10px] font-black text-brand-text/60 uppercase tracking-widest mb-2 z-10 text-center">Health Score</p>
+          <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-brand-text/10 p-4 md:p-5 flex-shrink-0 bg-brand-bg flex flex-col gap-4 sticky top-[61px] md:top-[73px] z-30 max-h-[40vh] md:max-h-none md:h-[calc(100vh-73px)] overflow-y-auto">
+            {/* Mobile Swipe Container for the side items to save vertical space */}
+            <div className="md:contents flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 pb-2 md:pb-0 items-center">
 
-              <div className="relative w-[6.5rem] h-[6.5rem] z-10 mb-4 flex-shrink-0">
-                <svg className="absolute inset-0 w-full h-full -rotate-90 origin-center filter drop-shadow-md">
-                  <circle cx="50%" cy="50%" r="42%" fill="none" stroke="currentColor" className="text-brand-text/10" strokeWidth="8%" />
-                  <circle
-                    cx="50%" cy="50%" r="42%"
-                    fill="none"
-                    stroke={scoreColor}
-                    strokeWidth="8%"
-                    strokeDasharray={`${2 * Math.PI * 42}%`}
-                    strokeDashoffset={`${2 * Math.PI * 42 - (audit.score / 100) * 2 * Math.PI * 42}%`}
-                    strokeLinecap="round"
-                    className="transition-all duration-1000 ease-out"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-4xl font-black text-brand-text tracking-tighter">{audit.score}</span>
+              <div className={`flex-shrink-0 snap-start w-[240px] md:w-full rounded-2xl md:rounded-3xl p-4 md:p-6 flex flex-col items-center justify-center shadow-lg relative overflow-hidden bg-brand-bg border transition-all ${audit.score >= 80 ? 'border-brand-accent/30 shadow-brand-accent/10' : audit.score >= 50 ? 'border-brand-secondary/30 shadow-brand-secondary/10' : 'border-brand-primary/30 shadow-brand-primary/10'}`}>
+                <div className={`absolute inset-0 opacity-[0.03] pointer-events-none ${scoreColorBg}`}></div>
+
+                <p className="text-[10px] font-black text-brand-text/60 uppercase tracking-widest mb-2 z-10 text-center">Health Score</p>
+
+                <div className="relative w-20 h-20 md:w-28 md:h-28 z-10 mb-4 flex-shrink-0 overflow-visible">
+                  <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full -rotate-90 origin-center filter drop-shadow-md overflow-visible">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" className="text-brand-text/10" strokeWidth="8" />
+                    <circle
+                      cx="50" cy="50" r="40"
+                      fill="none"
+                      stroke={scoreColor}
+                      strokeWidth="8"
+                      strokeDasharray="251.2"
+                      strokeDashoffset={251.2 - (audit.score / 100) * 251.2}
+                      strokeLinecap="round"
+                      className="transition-all duration-1000 ease-out"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-2xl md:text-3xl font-black text-brand-text tracking-tighter">{audit.score}</span>
+                  </div>
+                </div>
+
+                <div className="w-full flex items-center justify-center gap-1.5 px-2 py-1 bg-brand-text/[0.03] border border-brand-text/10 rounded-lg z-10 max-w-full overflow-hidden">
+                  <Globe size={10} className="text-brand-primary flex-shrink-0" />
+                  <span className="text-[9px] md:text-[10px] font-bold font-mono text-brand-text truncate" title={hostname}>{hostname}</span>
                 </div>
               </div>
 
-              <div className="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 bg-brand-text/[0.03] border border-brand-text/10 rounded-lg z-10">
-                <Globe size={10} className="text-brand-primary flex-shrink-0" />
-                <span className="text-[10px] font-bold font-mono text-brand-text truncate" title={hostname}>{hostname}</span>
+              <div className="flex md:flex-col gap-2 flex-shrink-0 snap-start self-start">
+                <div className="flex md:flex-col gap-2">
+                  {sidebarItems.map(item => (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveTab(item.id)}
+                      className={`flex items-center gap-2 md:w-full px-3 py-2 md:py-3.5 rounded-xl md:rounded-2xl text-[10px] md:text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === item.id ? 'bg-brand-primary/10 text-brand-primary border border-brand-primary/30 shadow-[0_0_20px_rgba(228,35,1,0.1)]' : 'text-brand-text/60 hover:bg-brand-text/5 hover:text-brand-text border border-transparent'}`}
+                    >
+                      {item.icon} <span className="mr-2 md:mr-0">{item.label}</span>
+                      {activeTab === item.id && <ChevronRight size={14} className="hidden md:block ml-auto text-brand-primary" />}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
-
-            <div className="space-y-2">
-              {sidebarItems.map(item => (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === item.id ? 'bg-brand-primary/10 text-brand-primary border border-brand-primary/30 shadow-[0_0_20px_rgba(228,35,1,0.1)]' : 'text-brand-text/60 hover:bg-brand-text/5 hover:text-brand-text'}`}
-                >
-                  {item.icon} {item.label}
-                  {activeTab === item.id && <ChevronRight size={16} className="ml-auto text-brand-primary" />}
-                </button>
-              ))}
-            </div>
-            <div className="border-t border-brand-primary/20 pt-6">
+            <div className="hidden md:block border-t border-brand-primary/20 pt-6 mt-4">
               <h4 className="text-[10px] font-black text-brand-text/40 uppercase tracking-[0.3em] mb-4 pl-2">Audit Modules</h4>
               <div className="space-y-1">
                 {audit.sections.map(s => (
@@ -446,8 +455,11 @@ function App() {
             </div>
           </aside>
 
-          <main id="report-content" className="flex-1 p-6 lg:p-10 w-full max-w-[1400px]">
-            <div className="flex flex-col gap-10">
+          <main id="report-content" className="flex-1 p-4 md:p-6 lg:p-10 w-full max-w-[1400px] overflow-hidden min-h-[50vh]">
+            <div className="flex flex-col gap-6 md:gap-10">
+              {/* Display Domain at top on PDF Export to ensure context matches pages */}
+              <div className="pdf-only hidden text-left mb-6 font-bold font-mono text-brand-primary">Audit Target: {hostname}</div>
+
               {activeTab === 'overview' && (
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -828,8 +840,14 @@ function App() {
 
             </div>
           </main>
+
+          {/* ASSISTANT UI */}
           {showAssistant && (
-            <aside className="w-96 border-l border-brand-text/10 bg-brand-bg flex-shrink-0 sticky top-[73px] h-[calc(100vh-73px)] hidden xl:flex">
+            <aside className="w-full md:w-96 border-t md:border-t-0 md:border-l border-brand-text/10 bg-brand-bg flex-shrink-0 sticky bottom-0 md:top-[73px] md:h-[calc(100vh-73px)] h-[50vh] flex flex-col shadow-2xl z-40">
+              <div className="flex md:hidden justify-between items-center p-3 border-b border-brand-text/10 bg-brand-text/[0.02]">
+                <span className="text-xs font-black uppercase tracking-widest text-brand-text">AI Assistant</span>
+                <button onClick={() => setShowAssistant(false)} className="text-brand-primary font-bold">Close X</button>
+              </div>
               <ChatInterface auditData={selectedAudit} />
             </aside>
           )}
