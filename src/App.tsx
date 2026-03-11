@@ -27,10 +27,11 @@ import { AuditService } from './services/AuditService';
 import { Pricing } from './components/Pricing';
 import { ScannerEffect } from './components/ScannerEffect';
 import { ChatInterface } from './components/ChatInterface';
+import { Dashboard } from './components/Dashboard';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
-export type AppState = 'IDLE' | 'SCANNING' | 'COMPLETED';
+export type AppState = 'IDLE' | 'DASHBOARD' | 'SCANNING' | 'COMPLETED';
 
 export interface GoogleAd {
   headline: string;
@@ -71,6 +72,9 @@ export interface AuditData {
 }
 
 function App() {
+  const { user } = useUser();
+  const { isSignedIn, isLoaded } = useAuth();
+  
   const [appState, setAppState] = useState<AppState>('IDLE');
   const [currentUrl, setCurrentUrl] = useState('');
   const [selectedAudit, setSelectedAudit] = useState<AuditData | null>(null);
@@ -93,8 +97,14 @@ function App() {
     else document.documentElement.classList.remove('dark');
   }, [theme]);
 
-  const { user } = useUser();
-  const { isSignedIn } = useAuth();
+  // Set default state based on auth
+  useEffect(() => {
+    if (isLoaded && isSignedIn && appState === 'IDLE') {
+      setAppState('DASHBOARD');
+    } else if (isLoaded && !isSignedIn && appState === 'DASHBOARD') {
+      setAppState('IDLE');
+    }
+  }, [isSignedIn, isLoaded]);
 
   // Load history
   useEffect(() => {
@@ -404,7 +414,7 @@ function App() {
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-1 sm:gap-2 ml-auto justify-end">
-            <button onClick={() => setAppState('IDLE')} className="flex flex-shrink-0 items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl border border-brand-text/10 hover:bg-brand-text/5 transition-all text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-brand-text">
+            <button onClick={() => setAppState(isSignedIn ? 'DASHBOARD' : 'IDLE')} className="flex flex-shrink-0 items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl border border-brand-text/10 hover:bg-brand-text/5 transition-all text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-brand-text">
               <span className="hidden sm:inline">New Scan</span>
               <span className="sm:hidden">New</span>
             </button>
@@ -971,6 +981,19 @@ function App() {
 
       <main className="flex-1 flex flex-col relative min-h-screen overflow-x-hidden">
         {appState === 'IDLE' && renderIdle()}
+        {appState === 'DASHBOARD' && (
+          <Dashboard 
+            auditHistory={auditHistory} 
+            onSelectAudit={(audit) => {
+              setSelectedAudit(audit);
+              setActiveTab('overview');
+              setAppState('COMPLETED');
+            }}
+            onNewScan={() => setAppState('IDLE')}
+            onUpgrade={() => setIsPricingOpen(true)}
+            plan={selectedPlan.toUpperCase()}
+          />
+        )}
         {appState === 'SCANNING' && renderScanning()}
         {appState === 'COMPLETED' && renderCompleted()}
       </main>
