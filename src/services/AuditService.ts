@@ -38,7 +38,13 @@ export class AuditService {
         }
 
         console.error("All CORS proxies failed:", lastError);
-        throw new Error("Could not reach the website. Firewalls might be blocking our scanners.");
+        throw new Error(
+            "Could not reach this website. This usually happens if the site has strict Cloudflare protection, anti-bot firewalls, or if the URL is typed incorrectly.\n\n" +
+            "How to fix this to run an audit:\n" +
+            "1. Check if the URL is correct (e.g. including https://)\n" +
+            "2. If it's your site, temporarily whitelist CORS/Scrapers.\n" +
+            "3. Try scanning a different, less strictly protected page (like a blog post)."
+        );
     }
 
     /**

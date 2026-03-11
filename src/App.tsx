@@ -232,9 +232,12 @@ function App() {
                 </button>
               </form>
               {auditError && (
-                <p className="mt-4 text-brand-primary text-sm font-bold flex items-center justify-center gap-2 px-2 animate-in fade-in duration-300">
-                  <AlertCircle size={16} /> {auditError}
-                </p>
+                <div className="mt-4 text-brand-primary text-sm font-bold flex items-start gap-2 px-2 animate-in fade-in duration-300 bg-brand-primary/10 border border-brand-primary/20 rounded-xl p-4 text-left">
+                  <AlertCircle size={20} className="flex-shrink-0 mt-0.5" /> 
+                  <p className="whitespace-pre-line">
+                    {auditError}
+                  </p>
+                </div>
               )}
             </div>
 
