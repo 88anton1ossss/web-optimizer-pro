@@ -28,6 +28,7 @@ import { Pricing } from './components/Pricing';
 import { ScannerEffect } from './components/ScannerEffect';
 import { ChatInterface } from './components/ChatInterface';
 import { Dashboard } from './components/Dashboard';
+import { GoogleCallback } from './components/GoogleCallback';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
@@ -89,6 +90,7 @@ function App() {
   const [isExporting, setIsExporting] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
+  const isGoogleCallbackRoute = window.location.pathname === '/ads/callback';
 
   const SUPPORTED_LANGUAGES = ['English', 'Spanish', 'Mandarin', 'Hindi', 'French', 'Arabic', 'Русский'];
 
@@ -401,6 +403,11 @@ function App() {
       }
     }
   };
+
+  if (isGoogleCallbackRoute) {
+    return <GoogleCallback />;
+  }
+
 
   const renderCompleted = () => {
     const audit = selectedAudit;
