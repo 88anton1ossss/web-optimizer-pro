@@ -176,60 +176,114 @@ function App() {
     }
   };
 
-  // ============= IDLE SCREEN =============
+  // ============= IDLE SCREEN / LANDING PAGE =============
   const renderIdle = () => {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand-primary/10 via-brand-bg to-brand-bg transition-colors duration-500">
-        <div className="text-center mb-16 space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-[10px] font-black uppercase tracking-[0.3em] animate-pulse">
-            <Shield size={12} />
-            Safe & Encrypted Protocol
-          </div>
-          <h1 className="text-6xl md:text-8xl font-black text-brand-text tracking-tighter leading-none">
-            DEEP AUDIT <br /> <span className="text-brand-primary">PROTOCOL</span>
-          </h1>
-          <p className="text-brand-text/60 text-lg md:text-xl max-w-2xl mx-auto font-medium">
-            Deploy Gemini 2.0 Flash to deconstruct your SEO architecture and AI semantic layers in real-time.
-          </p>
-        </div>
+      <div className="flex-1 flex flex-col bg-brand-bg transition-colors duration-500 overflow-y-auto">
+        
+        {/* HERO SECTION */}
+        <div className="flex flex-col items-center justify-center px-4 py-20 lg:py-32 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-brand-primary/10 via-brand-bg to-brand-bg text-center relative overflow-hidden">
+          
+          <div className="absolute top-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
 
-        <div className="w-full max-w-3xl glass-morphism rounded-[2.5rem] p-8 shadow-[0_0_50px_rgba(228,35,1,0.1)] border border-brand-primary/10 relative group bg-white/5 dark:bg-black/20 backdrop-blur-3xl">
-          <div className="absolute inset-0 bg-brand-primary/5 rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity" />
-          <form onSubmit={(e) => { e.preventDefault(); handleAuditSubmit(currentUrl); }} className="relative flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Globe className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-text/40 group-focus-within:text-brand-primary transition-colors" size={24} />
-              <input
-                id="main-url-input"
-                type="text"
-                placeholder="Enter Target URL (e.g. apple.com)"
-                value={currentUrl}
-                onChange={(e) => setCurrentUrl(e.target.value)}
-                className="w-full bg-black/10 dark:bg-black/40 border border-brand-text/10 rounded-2xl pl-16 pr-6 py-5 text-brand-text text-lg focus:outline-none focus:ring-2 focus:ring-brand-primary/50 transition-all placeholder:font-bold placeholder:text-brand-text/30"
-              />
+          <div className="relative z-10 max-w-5xl mx-auto space-y-8">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] animate-pulse mx-auto">
+              <Zap size={14} /> AI-Powered Growth Engine
             </div>
-            <button
-              type="submit"
-              className="bg-brand-primary hover:bg-brand-primary/90 text-brand-bg px-10 py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-brand-primary/20"
-            >
-              START SCAN <ArrowRight size={20} />
-            </button>
-          </form>
-          {auditError && (
-            <p className="mt-4 text-brand-primary text-sm font-bold flex items-center gap-2 px-2 animate-in fade-in duration-300">
-              <AlertCircle size={16} /> {auditError}
+            
+            <h1 className="text-5xl sm:text-6xl md:text-8xl font-black text-brand-text tracking-tighter leading-[0.9]">
+              REVEAL THE HIDDEN <br className="hidden md:block"/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-accent">REVENUE</span> IN YOUR WEBSITE
+            </h1>
+            
+            <p className="text-brand-text/60 text-lg md:text-2xl max-w-2xl mx-auto font-medium leading-relaxed">
+              Stop wasting money on blind marketing. Deploy our Neural Engine to instantly deconstruct your SEO architecture and generate high-converting Ads.
             </p>
-          )}
+
+            {/* MAIN CTA / SCANNER */}
+            <div className="w-full max-w-3xl glass-morphism rounded-[2rem] p-4 sm:p-6 shadow-[0_0_50px_rgba(228,35,1,0.1)] border border-brand-primary/10 relative group bg-white/5 dark:bg-black/20 backdrop-blur-3xl mx-auto mt-12">
+              <div className="absolute inset-0 bg-brand-primary/5 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity" />
+              <form onSubmit={(e) => { e.preventDefault(); handleAuditSubmit(currentUrl); }} className="relative flex flex-col sm:flex-row gap-3">
+                <div className="flex-1 relative">
+                  <Globe className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-text/40 group-focus-within:text-brand-primary transition-colors" size={24} />
+                  <input
+                    id="main-url-input"
+                    type="text"
+                    placeholder="Enter Website URL (e.g. apple.com)"
+                    value={currentUrl}
+                    onChange={(e) => setCurrentUrl(e.target.value)}
+                    className="w-full bg-black/10 dark:bg-black/40 border-2 border-transparent focus:border-brand-primary/30 rounded-2xl pl-16 pr-6 py-4 sm:py-5 text-brand-text text-lg focus:outline-none transition-all placeholder:font-bold placeholder:text-brand-text/30"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="bg-brand-primary hover:bg-brand-primary/90 text-brand-bg px-8 sm:px-10 py-4 sm:py-5 rounded-2xl font-black text-sm sm:text-lg flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-brand-primary/20 tracking-wide uppercase"
+                >
+                  Run Free Audit <ArrowRight size={20} />
+                </button>
+              </form>
+              {auditError && (
+                <p className="mt-4 text-brand-primary text-sm font-bold flex items-center justify-center gap-2 px-2 animate-in fade-in duration-300">
+                  <AlertCircle size={16} /> {auditError}
+                </p>
+              )}
+            </div>
+
+            <p className="text-xs font-bold text-brand-text/40 uppercase tracking-widest mt-6">Takes 30 seconds • No credit card required</p>
+
+            <div className="pt-10 flex flex-wrap justify-center gap-4 sm:gap-8 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                <span className="font-serif text-xl sm:text-2xl font-bold tracking-tight">Forbes</span>
+                <span className="font-sans text-xl sm:text-2xl font-black tracking-tighter">TechCrunch</span>
+                <span className="font-mono text-xl sm:text-2xl font-bold tracking-widest">WIRED</span>
+                <span className="font-sans text-xl sm:text-2xl font-bold italic tracking-tight">Bloomberg</span>
+            </div>
+          </div>
         </div>
 
-        <div className="mt-16 flex items-center gap-4">
+        {/* FEATURES GRID */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-24 border-t border-brand-text/5">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-5xl font-black text-brand-text uppercase tracking-tight mb-4">Why Top Agencies Use Us</h2>
+            <p className="text-brand-text/50 font-medium text-lg max-w-2xl mx-auto">We replace three full-time marketing roles with one Deep Audit Protocol. Gain unfair advantages over your competitors.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-brand-bg border border-brand-text/10 rounded-3xl p-8 hover:border-brand-primary/30 hover:shadow-lg transition-all group">
+              <div className="w-14 h-14 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Search size={28} className="text-brand-primary" />
+              </div>
+              <h3 className="text-xl font-black text-brand-text tracking-tight mb-3">Deep SEO Architecture</h3>
+              <p className="text-brand-text/60 leading-relaxed font-medium">Instantly discover missing keywords, broken backlink strategies, and get an exact checklist of what to fix to hit Page 1 on Google.</p>
+            </div>
+
+            <div className="bg-brand-bg border border-brand-text/10 rounded-3xl p-8 hover:border-brand-accent/30 hover:shadow-lg transition-all group">
+              <div className="w-14 h-14 rounded-2xl bg-brand-accent/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Megaphone size={28} className="text-brand-accent" />
+              </div>
+              <h3 className="text-xl font-black text-brand-text tracking-tight mb-3">AI-Driven Ad Copy</h3>
+              <p className="text-brand-text/60 leading-relaxed font-medium">Our Neural Engine drafts top-tier Google Search Ads with highly targeted headlines and sitelinks designed for maximum CTR and lower CPC.</p>
+            </div>
+
+            <div className="bg-brand-bg border border-brand-text/10 rounded-3xl p-8 hover:border-brand-secondary/30 hover:shadow-lg transition-all group">
+              <div className="w-14 h-14 rounded-2xl bg-brand-secondary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Download size={28} className="text-brand-secondary" />
+              </div>
+              <h3 className="text-xl font-black text-brand-text tracking-tight mb-3">White-Label PDF Reports</h3>
+              <p className="text-brand-text/60 leading-relaxed font-medium">Export the entire audit in a beautiful, presentation-ready PDF in one click. Perfect to send to clients or stakeholders.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* BOTTOM CTA */}
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-24 text-center">
+          <h2 className="text-4xl sm:text-6xl font-black text-brand-text tracking-tighter mb-8">READY TO DOMINATE?</h2>
           <button
-            onClick={() => setIsPricingOpen(true)}
-            className="px-6 py-3 rounded-xl bg-white/5 border border-brand-text/10 text-xs font-black text-brand-text hover:bg-brand-text/5 transition-all flex items-center gap-3"
+            onClick={() => document.getElementById('main-url-input')?.focus()}
+            className="bg-brand-primary hover:bg-brand-primary/90 text-brand-bg px-12 py-5 rounded-2xl font-black text-xl transition-all shadow-xl shadow-brand-primary/20 uppercase tracking-widest inline-flex items-center gap-3"
           >
-            <Zap size={14} className="text-brand-secondary" />
-            UPGRADE PROTOCOL: <span className="text-brand-primary">{selectedPlan.toUpperCase()} Active</span>
+            Start Free Scan <ArrowRight size={24} />
           </button>
         </div>
+
       </div>
     );
   };
