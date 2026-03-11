@@ -120,6 +120,32 @@ RETURN ONLY VALID JSON (no markdown, no code blocks):
     "Psychographics: Interests, values, lifestyle",
     "Pain Points: Primary problems this audience faces",
     "Buying Triggers: What motivates them to finally convert"
+  ],
+  "actionPlan": [
+    {
+      "phase": "Immediate Triage (Days 1-3)",
+      "focus": "Fixing critical technical roadblocks blocking indexation or conversions.",
+      "tasks": [
+        "Highly specific, actionable step based EXACTLY on the weakest point found in the audit.",
+        "Clear instruction 2"
+      ]
+    },
+    {
+      "phase": "Mid-Term Injection (Days 4-14)",
+      "focus": "Addressing content gaps and structural UX issues.",
+      "tasks": [
+        "Instruction 1",
+        "Instruction 2"
+      ]
+    },
+    {
+      "phase": "Long-Term Dominance (Days 15-30)",
+      "focus": "Scaling traffic and reinforcing authority.",
+      "tasks": [
+        "Instruction 1",
+        "Instruction 2"
+      ]
+    }
   ]
 }
 
@@ -131,6 +157,7 @@ RULES:
 - enterprise plan: return all 10 sections
 - Be DETERMINISTIC: same HTML = same scores (don't randomize)
 - All scores must be integers, NOT strings
+- actionPlan: Must contain EXACTLY 3 phases. The tasks MUST NOT BE GENERIC (like "Setup Analytics"). They must specifically reference weaknesses or missing elements found in the actual HTML of the audited site.
 - keywords: return top 10 highly profitable keywords + top 10 specific key phrases (mix of long-tail and geo-targeted). The keywords MUST be highly relevant to the SPECIFIC LOCATION/MARKET of the audited website. Return exactly 20 items.
 - ads: return 4 highly professional, high-converting Google Ads (2 search, 2 display) with 4 realistic sitelinks each. Base these on Google Trends and Google Ads best practices (strong CTR triggers).
 - campaignStrategy: return exactly 4 highly detailed and actionable PPC strategy steps covering Budget, Bidding, Match Types, and Negative Keywords.

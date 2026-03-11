@@ -70,6 +70,7 @@ export interface AuditData {
   ads?: GoogleAd[];
   campaignStrategy?: string[];
   targetAudience?: string[];
+  actionPlan?: { phase: string, focus: string, tasks: string[] }[];
 }
 
 function App() {
@@ -885,59 +886,76 @@ function App() {
 
               {/* ACTION PLAN TAB */}
               {activeTab === 'action' && (
-                <div className="space-y-8">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h2 className="text-2xl font-black text-brand-text flex items-center gap-3 tracking-wide"><Zap size={24} className="text-brand-primary" /> Phase-Based Action Plan</h2>
-                      <p className="text-sm text-brand-text/60 mt-1">Structured execution roadmap for exponential growth.</p>
+                <div className="space-y-8 relative">
+                  {selectedPlan === 'free' && (
+                    <div className="absolute inset-0 z-20 bg-brand-bg/60 backdrop-blur-md rounded-3xl flex flex-col items-center justify-center text-center p-8 border border-brand-text/10">
+                       <div className="w-16 h-16 rounded-2xl bg-brand-primary/20 flex items-center justify-center text-brand-primary mb-6 shadow-xl shadow-brand-primary/20">
+                          <Shield size={32} />
+                       </div>
+                       <h3 className="text-3xl font-black text-brand-text tracking-tighter mb-4">Pro Feature Locked</h3>
+                       <p className="text-brand-text/60 max-w-sm mb-8 font-medium">Upgrade your protocol to unlock the highly personalized, AI-generated action roadmap specifically targeting your site's weakest points.</p>
+                       <button onClick={() => setIsPricingOpen(true)} className="px-8 py-4 bg-brand-primary hover:bg-brand-primary/90 text-brand-bg rounded-xl font-black uppercase tracking-widest shadow-lg shadow-brand-primary/20 flex items-center gap-3 transition-all">
+                          <Zap size={18} /> Unlock Action Plan
+                       </button>
                     </div>
-                  </div>
-
-                  <div className="space-y-8 relative">
-                    <div className="absolute left-4 lg:left-8 top-12 bottom-12 w-[3px] bg-gradient-to-b from-brand-primary/50 via-brand-accent/50 to-brand-secondary/50 rounded-full" />
-
-                    {[
-                      {
-                        title: "Phase 1: Foundation (Days 1-14)",
-                        color: "brand-primary",
-                        icon: <Shield size={20} />,
-                        tasks: ["Fix technical SEO errors (404s, speed)", "Implement correct heading hierarchy (H1-H3)", "Setup Google Search Console & Analytics"]
-                      },
-                      {
-                        title: "Phase 2: Content Injection (Days 15-30)",
-                        color: "brand-accent",
-                        icon: <Sparkles size={20} />,
-                        tasks: ["Optimize existing pages for target keywords", "Publish 5 foundational pillar articles", "Improve internal linking structure"]
-                      },
-                      {
-                        title: "Phase 3: Amplification (Days 31-90)",
-                        color: "brand-secondary",
-                        icon: <TrendingUp size={20} />,
-                        tasks: ["Launch Google Search Ads campaign", "Begin targeted backlink outreach", "A/B test landing page conversions"]
-                      }
-                    ].map((phase, idx) => (
-                      <div key={idx} className="relative pl-16 lg:pl-28">
-                        <div className={`absolute left-0 lg:left-[14px] top-6 w-10 h-10 rounded-full bg-${phase.color}/20 border-2 border-${phase.color} flex items-center justify-center text-${phase.color} shadow-lg z-10`}>
-                          {phase.icon}
-                        </div>
-                        <div className="rounded-3xl border border-brand-text/10 bg-brand-bg p-8 shadow-sm group hover:border-brand-text/20 transition-all">
-                          <h3 className={`text-sm font-black text-${phase.color} uppercase tracking-widest mb-6`}>{phase.title}</h3>
-                          <ul className="space-y-3">
-                            {phase.tasks.map((task, tidx) => (
-                              <li key={tidx} className="flex items-start gap-4">
-                                <CheckCircle2 size={18} className={`text-brand-text/30 mt-0.5 flex-shrink-0`} />
-                                <span className="text-sm text-brand-text/80 font-medium leading-relaxed">{task}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                  )}
+                  
+                  <div className={`space-y-8 ${selectedPlan === 'free' ? 'opacity-20 pointer-events-none blur-sm' : ''}`}>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h2 className="text-2xl font-black text-brand-text flex items-center gap-3 tracking-wide"><Zap size={24} className="text-brand-primary" /> Phase-Based Action Plan</h2>
+                        <p className="text-sm text-brand-text/60 mt-1">Structured execution roadmap specifically designed to fix your lowest-scoring metrics.</p>
                       </div>
-                    ))}
+                    </div>
+
+                    <div className="space-y-8 relative">
+                      <div className="absolute left-4 lg:left-8 top-12 bottom-12 w-[3px] bg-gradient-to-b from-brand-primary/50 via-brand-accent/50 to-brand-secondary/50 rounded-full" />
+
+                      {(audit.actionPlan || [
+                      {
+                        phase: "Immediate Triage (Days 1-3)",
+                        focus: "Fixing critical technical roadblocks blocking indexation or conversions.",
+                        tasks: ["Fix technical SEO errors (404s, speed)", "Implement correct heading hierarchy"]
+                      },
+                      {
+                        phase: "Mid-Term Injection (Days 4-14)",
+                        focus: "Addressing content gaps.",
+                        tasks: ["Optimize existing pages for target keywords"]
+                      },
+                      {
+                        phase: "Long-Term Dominance (Days 15-30)",
+                        focus: "Scaling traffic.",
+                        tasks: ["Launch campaigns"]
+                      }
+                    ]).map((phase, idx) => {
+                      const color = idx === 0 ? 'brand-primary' : idx === 1 ? 'brand-accent' : 'brand-secondary';
+                      const icon = idx === 0 ? <Shield size={20} /> : idx === 1 ? <Sparkles size={20} /> : <TrendingUp size={20} />;
+                      return (
+                        <div key={idx} className="relative pl-16 lg:pl-28">
+                          <div className={`absolute left-0 lg:left-[14px] top-6 w-10 h-10 rounded-full bg-${color}/20 border-2 border-${color} flex items-center justify-center text-${color} shadow-lg z-10`}>
+                            {icon}
+                          </div>
+                          <div className="rounded-3xl border border-brand-text/10 bg-brand-bg p-8 shadow-sm group hover:border-brand-text/20 transition-all">
+                            <h3 className={`text-sm font-black text-${color} uppercase tracking-widest mb-2`}>{phase.phase}</h3>
+                            <p className="text-xs text-brand-text/50 font-bold mb-6 italic">{phase.focus}</p>
+                            <ul className="space-y-3">
+                              {phase.tasks.map((task: string, tidx: number) => (
+                                <li key={tidx} className="flex items-start gap-4">
+                                  <CheckCircle2 size={18} className={`text-brand-text/30 mt-0.5 flex-shrink-0`} />
+                                  <span className="text-sm text-brand-text/80 font-medium leading-relaxed">{task}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
-            </div>
+          </div>
           </main>
 
           {/* ASSISTANT UI */}
@@ -985,9 +1003,12 @@ function App() {
               {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
             </button>
             {isSignedIn ? (
-              <div className="glass-morphism px-3 py-1.5 rounded-xl flex items-center gap-3">
-                <span className="text-[10px] font-black text-brand-text/60 uppercase tracking-widest hidden md:block">Protocol Master</span>
-                <UserButton appearance={{ elements: { userButtonAvatarBox: "w-8 h-8 rounded-lg" } }} />
+              <div className="glass-morphism px-3 py-1.5 rounded-xl flex items-center gap-3 border border-brand-primary/20 bg-brand-bg/50 backdrop-blur-md">
+                <div className="hidden md:flex flex-col items-end justify-center mr-1">
+                  <span className="text-[10px] font-black text-brand-text uppercase tracking-widest leading-none">Protocol Master</span>
+                  <span className="text-[8px] font-bold text-brand-primary uppercase tracking-widest mt-0.5">Online</span>
+                </div>
+                <UserButton appearance={{ elements: { userButtonAvatarBox: "w-9 h-9 rounded-lg border-2 border-brand-primary/30 shadow-[0_0_15px_rgba(var(--brand-primary),0.3)]", userButtonBox: "flex items-center justify-center p-0.5" } }} />
               </div>
             ) : (
               <SignInButton mode="modal">
