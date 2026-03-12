@@ -31,7 +31,7 @@ export function Dashboard({ auditHistory, onSelectAudit, onNewScan, onUpgrade, p
   );
 
   return (
-    <div className="flex-1 flex flex-col bg-brand-bg transition-colors duration-500 overflow-y-auto px-6 py-10 lg:px-12">
+    <div className="flex-1 flex flex-col bg-brand-bg transition-colors duration-500 overflow-y-auto px-6 pt-24 pb-10 lg:px-12">
       <div className="max-w-6xl mx-auto w-full space-y-12">
         {/* Welcome Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">

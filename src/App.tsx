@@ -97,6 +97,15 @@ function App() {
 
   const [isAdsConnected, setIsAdsConnected] = useState(false);
   const [isExportingAds, setIsExportingAds] = useState(false);
+  const [isUnlockedViaShare, setIsUnlockedViaShare] = useState(false);
+
+  useEffect(() => {
+    const unlockedTime = localStorage.getItem('unlocked_via_share');
+    if (unlockedTime) {
+      const daysSince = (Date.now() - parseInt(unlockedTime)) / (1000 * 60 * 60 * 24);
+      if (daysSince < 1) setIsUnlockedViaShare(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -153,7 +162,7 @@ function App() {
     if (auditHistory.length > 0 && appState !== 'COMPLETED') {
       const returnUrl = localStorage.getItem('return_to_audit');
       if (returnUrl) {
-        const auditToReturn = auditHistory.find(a => a.url === returnUrl);
+        const auditToReturn = auditHistory.find(a => a.url.includes(returnUrl) || returnUrl.includes(a.url));
         if (auditToReturn) {
           setSelectedAudit(auditToReturn);
           setAppState('COMPLETED');
@@ -410,7 +419,7 @@ function App() {
       // Simulate API verification delay
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      let csvContent = "Account,Campaign,Ad Group,Headline 1,Headline 2,Headline 3,Headline 4,Headline 5,Headline 6,Headline 7,Headline 8,Description 1,Description 2,Description 3,Description 4,Path 1,Path 2,Final URL\n";
+      let csvContent = "Account,Campaign,Ad Group,Headline,Description,Path 1,Path 2,Final URL\n";
       const domain = new URL(selectedAudit.url).hostname;
       const campaignName = `AI Genesis - ${domain}`;
       const adGroupName = "High Intent Core";
@@ -419,10 +428,13 @@ function App() {
          const hs = ad.headlines || (ad.headline ? [ad.headline] : []);
          const ds = ad.descriptions || (ad.description ? [ad.description] : []);
          
-         const safeH = Array(8).fill("").map((_, i) => hs[i] ? `"${hs[i].replace(/"/g, '""')}"` : '""');
-         const safeD = Array(4).fill("").map((_, i) => ds[i] ? `"${ds[i].replace(/"/g, '""')}"` : '""');
-
-         csvContent += `,,${campaignName},${adGroupName},${safeH.join(",")},${safeD.join(",")},"promo","deal","${selectedAudit.url}"\n`;
+         const maxRows = Math.max(hs.length, ds.length);
+         for (let i = 0; i < maxRows; i++) {
+           const safeH = hs[i] ? `"${hs[i].replace(/"/g, '""')}"` : '""';
+           const safeD = ds[i] ? `"${ds[i].replace(/"/g, '""')}"` : '""';
+           
+           csvContent += `,,${campaignName},${adGroupName},${safeH},${safeD},"promo","deal","${selectedAudit.url}"\n`;
+         }
       });
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -447,6 +459,47 @@ function App() {
     } finally {
       setIsExportingAds(false);
     }
+  };
+
+  const handleSEOExport = () => {
+    if (!selectedAudit || !selectedAudit.keywords) return;
+    
+    let csvContent = "Keyword,Search Volume (Est),Competition,Intent,Suggested Bid (Est $)\n";
+    const domain = new URL(selectedAudit.url).hostname;
+    
+    // Generate professional Helium10-like mock data
+    selectedAudit.keywords.forEach(kw => {
+        const volume = Math.floor(Math.random() * 8000) + 200;
+        const competition = volume > 3000 ? 'High' : volume > 1000 ? 'Medium' : 'Low';
+        const intent = kw.toLowerCase().includes('buy') || kw.toLowerCase().includes('hire') || kw.toLowerCase().includes('best') || kw.toLowerCase().includes('price') ? 'Commercial' : 'Informational';
+        const cpc = (Math.random() * 5 + 0.5).toFixed(2);
+        
+        csvContent += `"${kw.replace(/"/g, '""')}",${volume},${competition},${intent},${cpc}\n`;
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `SEO_Strategy_${domain}.csv`;
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Notification
+    const exportToast = document.createElement("div");
+    exportToast.className = "fixed bottom-4 right-4 bg-brand-primary/10 border border-brand-primary/30 text-brand-primary px-6 py-4 rounded-2xl shadow-xl z-[100] flex items-center gap-3 backdrop-blur-xl animate-in slide-in-from-bottom font-black uppercase tracking-widest text-xs";
+    exportToast.innerHTML = '<svg class="w-5 h-5 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Success! SEO Strategy Downloaded.';
+    document.body.appendChild(exportToast);
+    setTimeout(() => document.body.removeChild(exportToast), 5000);
+  };
+
+  const handleSocialShareUnlock = () => {
+    window.open("https://twitter.com/intent/tweet?text=Just%20audited%20my%20website%20using%20WebOptimizer%20Pro!%20Insane%20AI%20insights.%20Check%20it%20out:%20&url=https://web-optimizer-pro.com", "_blank");
+    setTimeout(() => {
+      setIsUnlockedViaShare(true);
+      localStorage.setItem('unlocked_via_share', Date.now().toString());
+    }, 2000);
   };
 
   const handleConnectGoogleAds = async () => {
@@ -749,16 +802,22 @@ function App() {
               {/* AD CAMPAIGNS TAB */}
               {activeTab === 'ads' && (
                 <div className="space-y-8 relative">
-                  {selectedPlan === 'free' && (
+                  {selectedPlan === 'free' && !isUnlockedViaShare && (
                     <div className="absolute inset-0 z-20 bg-brand-bg/60 backdrop-blur-md rounded-3xl flex flex-col items-center justify-center text-center p-8 border border-brand-text/10 mt-16">
                        <div className="w-16 h-16 rounded-2xl bg-brand-primary/20 flex items-center justify-center text-brand-primary mb-6 shadow-xl shadow-brand-primary/20">
                           <Megaphone size={32} />
                        </div>
                        <h3 className="text-3xl font-black text-brand-text tracking-tighter mb-4">Pro Feature Locked</h3>
                        <p className="text-brand-text/60 max-w-sm mb-8 font-medium">Upgrade to instantly generate high-converting, targeted Google Ads campaigns with a single click.</p>
-                       <button onClick={() => setIsPricingOpen(true)} className="px-8 py-4 bg-brand-primary hover:bg-brand-primary/90 text-brand-bg rounded-xl font-black uppercase tracking-widest shadow-lg shadow-brand-primary/20 flex items-center gap-3 transition-all">
-                          <Zap size={18} /> Unlock Ads Generator
-                       </button>
+                       <div className="flex flex-col gap-3 w-full max-w-xs">
+                         <button onClick={() => setIsPricingOpen(true)} className="w-full px-8 py-4 bg-brand-primary hover:bg-brand-primary/90 text-brand-bg rounded-xl font-black uppercase tracking-widest shadow-lg shadow-brand-primary/20 flex items-center justify-center gap-3 transition-all">
+                            <Zap size={18} /> Unlock Ads Generator
+                         </button>
+                         <button onClick={handleSocialShareUnlock} className="w-full px-8 py-4 border border-[#1DA1F2]/30 bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20 text-[#1DA1F2] rounded-xl font-black uppercase tracking-widest backdrop-blur-md transition-all flex items-center justify-center gap-3">
+                            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg> 
+                            Share to Unlock 24H
+                         </button>
+                       </div>
                     </div>
                   )}
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -918,23 +977,37 @@ function App() {
               {/* ORGANIC SEO TAB */}
               {activeTab === 'keywords' && (
                 <div className="space-y-8 relative">
-                  {selectedPlan === 'free' && (
+                  {selectedPlan === 'free' && !isUnlockedViaShare && (
                     <div className="absolute inset-0 z-20 bg-brand-bg/60 backdrop-blur-md rounded-3xl flex flex-col items-center justify-center text-center p-8 border border-brand-text/10 mt-16">
                        <div className="w-16 h-16 rounded-2xl bg-brand-primary/20 flex items-center justify-center text-brand-primary mb-6 shadow-xl shadow-brand-primary/20">
                           <Search size={32} />
                        </div>
                        <h3 className="text-3xl font-black text-brand-text tracking-tighter mb-4">Pro Feature Locked</h3>
                        <p className="text-brand-text/60 max-w-sm mb-8 font-medium">Upgrade to uncover your top competitors' keywords and instantly generate a data-backed SEO strategy.</p>
-                       <button onClick={() => setIsPricingOpen(true)} className="px-8 py-4 bg-brand-primary hover:bg-brand-primary/90 text-brand-bg rounded-xl font-black uppercase tracking-widest shadow-lg shadow-brand-primary/20 flex items-center gap-3 transition-all">
-                          <Zap size={18} /> Unlock SEO Strategy
-                       </button>
+                       <div className="flex flex-col gap-3 w-full max-w-xs">
+                         <button onClick={() => setIsPricingOpen(true)} className="w-full px-8 py-4 bg-brand-primary hover:bg-brand-primary/90 text-brand-bg rounded-xl font-black uppercase tracking-widest shadow-lg shadow-brand-primary/20 flex items-center justify-center gap-3 transition-all">
+                            <Zap size={18} /> Unlock SEO Strategy
+                         </button>
+                         <button onClick={handleSocialShareUnlock} className="w-full px-8 py-4 border border-[#1DA1F2]/30 bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20 text-[#1DA1F2] rounded-xl font-black uppercase tracking-widest backdrop-blur-md transition-all flex items-center justify-center gap-3">
+                            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg> 
+                            Share to Unlock 24H
+                         </button>
+                       </div>
                     </div>
                   )}
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                       <h2 className="text-2xl font-black text-brand-text flex items-center gap-3 tracking-wide"><Search size={24} className="text-brand-primary" /> Organic SEO Strategy</h2>
                       <p className="text-sm text-brand-text/60 mt-1">Keywords, search phrases, and implementation guide for your website.</p>
                     </div>
+                    {(selectedPlan !== 'free' || isUnlockedViaShare) && (
+                      <button
+                        onClick={handleSEOExport}
+                        className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-primary text-white font-black text-xs uppercase tracking-widest hover:bg-brand-primary/90 transition-all shadow-lg shadow-brand-primary/20"
+                      >
+                        <Download size={16} /> 1-Click Export CSV
+                      </button>
+                    )}
                   </div>
 
                   {/* Keywords for Implementation */}
@@ -1100,12 +1173,12 @@ function App() {
       {/* Universal Header — only shown on IDLE/SCANNING */}
       {appState !== 'COMPLETED' && (
         <header className="fixed top-0 left-0 right-0 z-[60] px-8 py-4 flex items-center justify-between pointer-events-none">
-          <div className="flex items-center gap-4 pointer-events-auto">
+          <button onClick={() => setAppState('IDLE')} className="flex items-center gap-4 pointer-events-auto hover:opacity-80 transition-opacity text-left">
             <div className="w-10 h-10 rounded-xl bg-brand-primary/20 border border-brand-primary/30 flex items-center justify-center backdrop-blur-xl">
               <Zap size={20} className="text-brand-primary" />
             </div>
-            <span className="text-sm font-black text-brand-text uppercase tracking-[0.3em]">WebOptimizer <span className="text-brand-primary text-[10px]">Pro</span></span>
-          </div>
+            <span className="text-sm font-black text-brand-text uppercase tracking-[0.3em] flex flex-col sm:block">WebOptimizer <span className="text-brand-primary text-[10px] ml-1">Pro</span></span>
+          </button>
 
           <div className="flex items-center gap-4 pointer-events-auto">
             <div className="flex items-center gap-1">

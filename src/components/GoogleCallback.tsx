@@ -58,7 +58,7 @@ export function GoogleCallback() {
           
           // Redirect the user back to the main app after 3 seconds
           setTimeout(() => {
-             window.location.href = '/';
+             window.location.replace('/');
           }, 3000);
         } else {
            throw new Error("No refresh token returned.");
@@ -98,7 +98,7 @@ export function GoogleCallback() {
              <h2 className="text-2xl font-black text-white">Connection Failed</h2>
              <p className="text-[#EA4335]/80 mt-2 text-sm">{errorMessage}</p>
              <button 
-                onClick={() => window.location.href = '/'}
+                onClick={() => window.location.replace('/')}
                 className="mt-8 px-6 py-3 bg-white/10 hover:bg-white/20 transition-colors rounded-xl font-bold uppercase tracking-wide text-sm"
              >
                 Return to Dashboard
