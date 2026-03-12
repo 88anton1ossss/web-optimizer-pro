@@ -9,7 +9,7 @@ interface Message {
 
 export const ChatInterface: React.FC<{ auditData: any }> = ({ auditData }) => {
     const [messages, setMessages] = useState<Message[]>([
-        { role: 'bot', content: "Protocol initialized. I'm your elite marketing strategist, targetologist, and SEO auditor. I've analyzed your site data — ask me anything about ads setup, keyword implementation, campaign structure, or conversion optimization." }
+        { role: 'bot', content: "Protocol active. I am your elite media buyer and SEO strategist. I have fully analyzed your website's vulnerabilities and growth points. Tell me what we are fixing first: breaking down the action plan, setting up the Google Ads campaigns, or executing targeted SEO steps?" }
     ]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);

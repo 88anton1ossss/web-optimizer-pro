@@ -210,10 +210,10 @@ function App() {
 
   const getStatusDot = (status: string) => {
     switch (status) {
-      case 'excellent': return 'bg-emerald-500';
-      case 'good': return 'bg-blue-500';
-      case 'needs-improvement': return 'bg-amber-500';
-      case 'critical': return 'bg-red-500';
+      case 'excellent': return 'bg-brand-accent shadow-[0_0_10px_rgb(var(--brand-accent))]';
+      case 'good':
+      case 'needs-improvement': return 'bg-brand-secondary shadow-[0_0_10px_rgb(var(--brand-secondary))]';
+      case 'critical': return 'bg-brand-primary shadow-[0_0_10px_rgb(var(--brand-primary))]';
       default: return 'bg-gray-400';
     }
   };
@@ -507,7 +507,7 @@ function App() {
     return (
       <div className="flex-1 flex flex-col bg-brand-bg text-brand-text transition-colors duration-500">
         <header className="sticky top-0 z-50 flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-brand-text/10 bg-brand-bg/90 backdrop-blur-xl">
-          <div className="flex items-center gap-2 sm:gap-4">
+          <button onClick={() => setAppState(isSignedIn ? 'DASHBOARD' : 'IDLE')} className="flex items-center gap-2 sm:gap-4 text-left transition-opacity hover:opacity-80">
             <div className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 rounded-xl bg-brand-primary/20 border border-brand-primary/30 flex items-center justify-center">
               <Zap size={18} className="text-brand-primary" />
             </div>
@@ -517,7 +517,7 @@ function App() {
               </h1>
               <span className="text-[7px] sm:text-[9px] font-black text-brand-accent uppercase tracking-[0.3em] hidden sm:block">Deep Audit Protocol V2.0</span>
             </div>
-          </div>
+          </button>
           <div className="flex flex-wrap items-center gap-1 sm:gap-2 ml-auto justify-end">
             <button onClick={() => setAppState(isSignedIn ? 'DASHBOARD' : 'IDLE')} className="flex flex-shrink-0 items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl border border-brand-text/10 hover:bg-brand-text/5 transition-all text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-brand-text">
               <span className="hidden sm:inline">New Scan</span>
@@ -748,7 +748,19 @@ function App() {
 
               {/* AD CAMPAIGNS TAB */}
               {activeTab === 'ads' && (
-                <div className="space-y-8">
+                <div className="space-y-8 relative">
+                  {selectedPlan === 'free' && (
+                    <div className="absolute inset-0 z-20 bg-brand-bg/60 backdrop-blur-md rounded-3xl flex flex-col items-center justify-center text-center p-8 border border-brand-text/10 mt-16">
+                       <div className="w-16 h-16 rounded-2xl bg-brand-primary/20 flex items-center justify-center text-brand-primary mb-6 shadow-xl shadow-brand-primary/20">
+                          <Megaphone size={32} />
+                       </div>
+                       <h3 className="text-3xl font-black text-brand-text tracking-tighter mb-4">Pro Feature Locked</h3>
+                       <p className="text-brand-text/60 max-w-sm mb-8 font-medium">Upgrade to instantly generate high-converting, targeted Google Ads campaigns with a single click.</p>
+                       <button onClick={() => setIsPricingOpen(true)} className="px-8 py-4 bg-brand-primary hover:bg-brand-primary/90 text-brand-bg rounded-xl font-black uppercase tracking-widest shadow-lg shadow-brand-primary/20 flex items-center gap-3 transition-all">
+                          <Zap size={18} /> Unlock Ads Generator
+                       </button>
+                    </div>
+                  )}
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                       <h2 className="text-2xl font-black text-brand-text flex items-center gap-3 tracking-wide"><Megaphone size={24} className="text-brand-primary" /> Google Ads Generator</h2>
@@ -905,7 +917,19 @@ function App() {
 
               {/* ORGANIC SEO TAB */}
               {activeTab === 'keywords' && (
-                <div className="space-y-8">
+                <div className="space-y-8 relative">
+                  {selectedPlan === 'free' && (
+                    <div className="absolute inset-0 z-20 bg-brand-bg/60 backdrop-blur-md rounded-3xl flex flex-col items-center justify-center text-center p-8 border border-brand-text/10 mt-16">
+                       <div className="w-16 h-16 rounded-2xl bg-brand-primary/20 flex items-center justify-center text-brand-primary mb-6 shadow-xl shadow-brand-primary/20">
+                          <Search size={32} />
+                       </div>
+                       <h3 className="text-3xl font-black text-brand-text tracking-tighter mb-4">Pro Feature Locked</h3>
+                       <p className="text-brand-text/60 max-w-sm mb-8 font-medium">Upgrade to uncover your top competitors' keywords and instantly generate a data-backed SEO strategy.</p>
+                       <button onClick={() => setIsPricingOpen(true)} className="px-8 py-4 bg-brand-primary hover:bg-brand-primary/90 text-brand-bg rounded-xl font-black uppercase tracking-widest shadow-lg shadow-brand-primary/20 flex items-center gap-3 transition-all">
+                          <Zap size={18} /> Unlock SEO Strategy
+                       </button>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between">
                     <div>
                       <h2 className="text-2xl font-black text-brand-text flex items-center gap-3 tracking-wide"><Search size={24} className="text-brand-primary" /> Organic SEO Strategy</h2>

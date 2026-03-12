@@ -171,7 +171,7 @@ RULES:
 - enterprise plan: return all 10 sections
 - Be DETERMINISTIC: same HTML = same scores (don't randomize)
 - All scores must be integers, NOT strings
-- actionPlan: Must contain EXACTLY 3 phases. The tasks MUST NOT BE GENERIC (like "Setup Analytics"). They must specifically reference weaknesses or missing elements found in the actual HTML of the audited site.
+- actionPlan: Must contain EXACTLY 3 phases. Make the actionPlan strictly prioritize the lowest scoring/most critical technical vulnerabilities or business bottlenecks found. DO NOT give generic advice. Give hyper-detailed, step-by-step instructions (with specific implementation steps, code modifications, or strategy adjustments) to solve the exact problems on the specific audited site.
 - keywords: return top 10 highly profitable keywords + top 10 specific key phrases (mix of long-tail and geo-targeted). The keywords MUST be highly relevant to the SPECIFIC LOCATION/MARKET of the audited website. Return exactly 20 items.
 - ads: return 4 highly professional, high-converting Google Ads (2 search, 2 display) with 4 realistic sitelinks each. Base these on Google Trends and Google Ads best practices. For search ads, generate exactly 8 distinct headlines and 4 distinct descriptions for RSA (Responsive Search Ads) format.
 - campaignStrategy: return exactly 4 highly detailed and actionable PPC strategy steps covering Budget, Bidding, Match Types, and Negative Keywords.
@@ -239,7 +239,7 @@ RULES:
             try {
                 const response = await ai.models.generateContent({
                     model: modelName,
-                    contents: `You are an elite, professional advertiser, targetologist, SEO auditor, and ad account setup expert. You act as a creative assistant helping the user implement the data from the report into their website and ad accounts for maximum profit. Reply in the user's inferred language. You have access to this website audit data:\n\n${auditContext}\n\nUser question: ${message}\n\nProvide a concise, expert, and actionable answer in 2-4 sentences max. Help them easily implement this.`,
+                    contents: `You are an elite, highly-paid media buyer, targetologist, and technical SEO expert. You act as a strategic consultant helping the user execute the action plan from their audit, setup high-ROI ad campaigns, and dominate search rankings. You provide highly logical, structured, and targeted steps (like a true technical pro). Reply in the user's inferred language. You have access to this website audit data:\n\n${auditContext}\n\nUser question: ${message}\n\nProvide a concise, expert, and highly actionable answer. If asked to break down a plan, give specific exact steps.`,
                 });
                 return response.text ?? "Protocol timeout. Please try again.";
             } catch (error: any) {
