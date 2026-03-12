@@ -103,8 +103,22 @@ RETURN ONLY VALID JSON (no markdown, no code blocks):
   "keywords": ["<Highly specific long-tail buyer-intent keyword 1>", "<Profitable search phrase 2>", "<Geo-targeted service keyword 3>", "<Competitor alternative keyword 4>", "keyword 5", "keyword 6", "keyword 7", "keyword 8", "keyword 9", "keyword 10", "keyword 11", "keyword 12"],
   "ads": [
     {
-      "headline": "Compelling Ad Headline matching the exact niche (max 30 chars)",
-      "description": "Benefit-driven ad description with strong CTA (max 90 chars)",
+      "headlines": [
+        "Create high-converting headline 1 (max 30 chars)",
+        "Headline 2",
+        "Headline 3",
+        "Headline 4",
+        "Headline 5",
+        "Headline 6",
+        "Headline 7",
+        "Headline 8"
+      ],
+      "descriptions": [
+        "Benefit-driven description 1 (max 90 chars)",
+        "Description 2",
+        "Description 3",
+        "Description 4"
+      ],
       "type": "search",
       "sitelinks": ["Specific Service Link", "Pricing Info", "Contact Us", "Testimonials"]
     }
@@ -159,7 +173,7 @@ RULES:
 - All scores must be integers, NOT strings
 - actionPlan: Must contain EXACTLY 3 phases. The tasks MUST NOT BE GENERIC (like "Setup Analytics"). They must specifically reference weaknesses or missing elements found in the actual HTML of the audited site.
 - keywords: return top 10 highly profitable keywords + top 10 specific key phrases (mix of long-tail and geo-targeted). The keywords MUST be highly relevant to the SPECIFIC LOCATION/MARKET of the audited website. Return exactly 20 items.
-- ads: return 4 highly professional, high-converting Google Ads (2 search, 2 display) with 4 realistic sitelinks each. Base these on Google Trends and Google Ads best practices (strong CTR triggers).
+- ads: return 4 highly professional, high-converting Google Ads (2 search, 2 display) with 4 realistic sitelinks each. Base these on Google Trends and Google Ads best practices. For search ads, generate exactly 8 distinct headlines and 4 distinct descriptions for RSA (Responsive Search Ads) format.
 - campaignStrategy: return exactly 4 highly detailed and actionable PPC strategy steps covering Budget, Bidding, Match Types, and Negative Keywords.
 - targetAudience: return exactly 4 deeply researched audience personas covering Demographics, Psychographics, Pain Points, and Buying Triggers.
 `;

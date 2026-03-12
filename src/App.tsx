@@ -35,8 +35,10 @@ import jsPDF from 'jspdf';
 export type AppState = 'IDLE' | 'DASHBOARD' | 'SCANNING' | 'COMPLETED';
 
 export interface GoogleAd {
-  headline: string;
-  description: string;
+  headline?: string;     // Legacy
+  description?: string;  // Legacy
+  headlines?: string[];
+  descriptions?: string[];
   type: 'search' | 'display';
   sitelinks?: string[];
 }
@@ -408,13 +410,19 @@ function App() {
       // Simulate API verification delay
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      let csvContent = "Account,Campaign,Ad Group,Headline 1,Headline 2,Description,Path 1,Path 2,Final URL\n";
+      let csvContent = "Account,Campaign,Ad Group,Headline 1,Headline 2,Headline 3,Headline 4,Headline 5,Headline 6,Headline 7,Headline 8,Description 1,Description 2,Description 3,Description 4,Path 1,Path 2,Final URL\n";
       const domain = new URL(selectedAudit.url).hostname;
       const campaignName = `AI Genesis - ${domain}`;
       const adGroupName = "High Intent Core";
       
       selectedAudit.ads.filter(a => a.type === 'search').forEach(ad => {
-         csvContent += `,,${campaignName},${adGroupName},"${ad.headline.replace(/"/g, '""')}","Learn More", "${ad.description.replace(/"/g, '""')}", "promo", "deal", "${selectedAudit.url}"\n`;
+         const hs = ad.headlines || (ad.headline ? [ad.headline] : []);
+         const ds = ad.descriptions || (ad.description ? [ad.description] : []);
+         
+         const safeH = Array(8).fill("").map((_, i) => hs[i] ? `"${hs[i].replace(/"/g, '""')}"` : '""');
+         const safeD = Array(4).fill("").map((_, i) => ds[i] ? `"${ds[i].replace(/"/g, '""')}"` : '""');
+
+         csvContent += `,,${campaignName},${adGroupName},${safeH.join(",")},${safeD.join(",")},"promo","deal","${selectedAudit.url}"\n`;
       });
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -825,22 +833,26 @@ function App() {
                               </button>
                             </div>
                             <div className="space-y-4">
-                              <div>
-                                <h4 className="text-[10px] font-black text-brand-primary uppercase tracking-[0.2em] mb-3">Headlines</h4>
-                                <div className="space-y-2">
-                                  {(audit.ads || []).map((ad: any, i: number) => (
-                                    <div key={i} className="px-4 py-2.5 rounded-xl border border-brand-text/10 text-sm text-brand-text font-medium bg-brand-text/[0.02]"><span className="select-all">{ad.headline}</span></div>
-                                  ))}
+                              {(audit.ads || []).map((ad: any, i: number) => (
+                                <div key={i} className="space-y-4">
+                                  <div>
+                                      <h4 className="text-[10px] font-black text-brand-primary uppercase tracking-[0.2em] mb-3">Headlines</h4>
+                                      <div className="space-y-2">
+                                        {(ad.headlines || (ad.headline ? [ad.headline]: [])).map((h: string, j: number) => (
+                                          <div key={j} className="px-4 py-2.5 rounded-xl border border-brand-text/10 text-sm text-brand-text font-medium bg-brand-text/[0.02]"><span className="select-all">{h}</span></div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <h4 className="text-[10px] font-black text-brand-secondary uppercase tracking-[0.2em] mb-3">Descriptions</h4>
+                                      <div className="space-y-2">
+                                        {(ad.descriptions || (ad.description ? [ad.description]: [])).map((d: string, j: number) => (
+                                          <div key={j} className="px-4 py-2.5 rounded-xl border border-brand-text/10 text-sm text-brand-text/80 italic bg-brand-text/[0.02]"><span className="select-all">"{d}"</span></div>
+                                        ))}
+                                      </div>
+                                    </div>
                                 </div>
-                              </div>
-                              <div>
-                                <h4 className="text-[10px] font-black text-brand-secondary uppercase tracking-[0.2em] mb-3">Descriptions</h4>
-                                <div className="space-y-2">
-                                  {(audit.ads || []).map((ad: any, i: number) => (
-                                    <div key={i} className="px-4 py-2.5 rounded-xl border border-brand-text/10 text-sm text-brand-text/80 italic bg-brand-text/[0.02]"><span className="select-all">"{ad.description}"</span></div>
-                                  ))}
-                                </div>
-                              </div>
+                              ))}
                             </div>
                           </div>
                         </div>
